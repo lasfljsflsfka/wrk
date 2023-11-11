@@ -7,20 +7,6 @@ on:
     - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
-  # create-release:
-  #   name: create-release
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - name: Create Release
-  #       id: create_release
-  #       uses: actions/create-release@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         tag_name: ${{ github.ref }}
-  #         release_name: Release ${{ github.ref }}
-  #         draft: false
-  #         prerelease: false
   build:
     runs-on: ${{ matrix.builder }}
     strategy:
@@ -33,10 +19,20 @@ jobs:
       - name: build
         run: make
         
+      - name: Package as archive
+        shell: bash
+        run: |
+          echo running archive
+          if [[ "${{ matrix.builder }}" == "windows-latest" ]]; then
+            7z a ../../../${{ matrix.builder }} ${{ github.event.repository.name }}.exe
+          else
+            tar czvf ../../../${{ matrix.builder }} ${{ github.event.repository.name }}
+          fi
+
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v1
         with:
           draft: true
-          files: "${{ github.event.repository.name }}*"
+          files: "${{ github.event.repository.name }}-*"
           body_path: Changes.md
       
