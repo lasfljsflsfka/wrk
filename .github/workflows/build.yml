@@ -24,9 +24,9 @@ jobs:
         run: |
           echo running archive
           if [[ "${{ matrix.builder }}" == "windows-latest" ]]; then
-            7z a ../../../${{ matrix.builder }} ${{ github.event.repository.name }}.exe
+            7z a ./${{ matrix.builder }}-${{ github.event.repository.name }} ./${{ github.event.repository.name }}.exe
           else
-            tar czvf ../../../${{ matrix.builder }} ${{ github.event.repository.name }}
+            tar czvf ./${{ matrix.builder }}-${{ github.event.repository.name }} ./${{ github.event.repository.name }}
           fi
 
       - name: Publish GitHub release
