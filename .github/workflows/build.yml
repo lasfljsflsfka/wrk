@@ -33,6 +33,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           draft: true
-          files: "${{ github.event.repository.name }}-*"
+          files: "./${{ matrix.builder }}-${{ github.event.repository.name }}*"
           body_path: Changes.md
       
