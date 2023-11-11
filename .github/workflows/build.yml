@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.builder }}
     strategy:
       matrix:
-        builder: [macos-latest, ubuntu-latest, windows-latest]
+        builder: [macos-latest, ubuntu-latest] # windows-latest OpenSSL error
     steps:
       - uses: actions/checkout@v2
         with:
