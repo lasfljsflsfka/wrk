@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.builder }}
     strategy:
       matrix:
-        builder: [macos-latest, ubuntu-latest]
+        builder: [macos-latest, ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -24,9 +24,9 @@ jobs:
         run: |
           echo running archive
           if [[ "${{ matrix.builder }}" == "windows-latest" ]]; then
-            7z a ./${{ matrix.builder }}-${{ github.event.repository.name }} ./${{ github.event.repository.name }}.exe
+            7z a ./${{ matrix.builder }}-${{ github.event.repository.name }}.7z ${{ github.event.repository.name }}.exe
           else
-            tar czvf ./${{ matrix.builder }}-${{ github.event.repository.name }} ./${{ github.event.repository.name }}
+            tar czvf ./${{ matrix.builder }}-${{ github.event.repository.name }}.tar.gz ${{ github.event.repository.name }}
           fi
 
       - name: Publish GitHub release
