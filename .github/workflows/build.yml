@@ -1,9 +1,26 @@
-name: build
+name: build release
 
 on:
   push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+    - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
+  # create-release:
+  #   name: create-release
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: Create Release
+  #       id: create_release
+  #       uses: actions/create-release@v1
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       with:
+  #         tag_name: ${{ github.ref }}
+  #         release_name: Release ${{ github.ref }}
+  #         draft: false
+  #         prerelease: false
   build:
     runs-on: ${{ matrix.builder }}
     strategy:
@@ -15,3 +32,11 @@ jobs:
           fetch-depth: 0
       - name: build
         run: make
+        
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          files: "${{ github.event.repository.name }}*"
+          body_path: Changes.md
+      
